@@ -21,7 +21,7 @@
 <!--    <a href="{{ url_for('login') }}">Log in</a>-->
     <ul>
     {% if session['logged_in'] %}
-        <li><a href="{{url_for('logout')}}">Logout</a></li>
+        <li><a href="{{url_for('logout')}}" onclick="logOut()">Logout</a></li>
         <li style="float:right"><p>Signed in as {{ session['username'] }}</p></li>
     {% else %}
         <li><a href="{{url_for('register')}}">Register</a></li>
@@ -44,6 +44,7 @@
                         <th>Surface Water Percentage</th>
                         <th>Population</th>
                         <th>Residents</th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody id="data"></tbody>

@@ -4,6 +4,8 @@ let api_url = "https://swapi.py4e.com/api/planets/";
 let next_url = "";
 let previous_url = "";
 let allPlanetsResidents = [];
+const voteButton = document.querySelectorAll(".vote")
+
 
 async function getData(url) {
     const response = await fetch(url);
@@ -14,10 +16,10 @@ async function getData(url) {
     for (let planet of data['results']) {
         const response2 = await fetch(planet['url']);
         let data2 = await response2.json();
-        console.log(data2);
+        // console.log(data2);
         allPlanetsResidents.push(data2['url'])
     }
-    console.log(allPlanetsResidents);
+    // console.log(allPlanetsResidents);
 }
 
 getData(api_url).then();
@@ -25,13 +27,29 @@ getData(api_url).then();
 next.addEventListener('click', () => {
     if (next_url){
         getData(next_url).then();
+        saveVotes(next_url)
     }
 });
 previous.addEventListener('click', () => {
     if (previous_url) {
         getData(previous_url).then();
+        saveVotes(previous_url)
     }
 });
+
+
+const saveToStorage = document.querySelector('#saveToStorage')
+
+function saveUserToSession(){
+    let userSession = document.querySelector('#username')
+    window.sessionStorage.setItem('username',userSession.value)
+
+}
+
+
+function logOut(){
+    window.sessionStorage.removeItem('username')
+}
 
 function insertData(planets) {
     let planetsTable = '';
@@ -58,10 +76,15 @@ function insertData(planets) {
                 <button type="button" class="btn btn-outline-dark" data-toggle="modal" data-target="#modalComponent"
                 onclick="insertResidents('${planet.url}', '${planet.name}')">${planet.residents.length} resident(s)</button>
                 `;
-//             planet.residents = `<button type="button" class="btn btn-outline-secondary" data-toggle="modal" data-target="#exampleModal"
-// onclick="insertResidents(`${planet.url}`, `${planet.name})" >
-//     ` + planet.residents.length + " resident(s)" + `</button>`
         }
+        if (sessionStorage.getItem('username') != null) {
+            //redirect to page
+            console.log('You are logged in');
+        } else{
+            //show validation message
+          console.log('You are not logged in');
+        }
+
         planetsTable += "<tr>";
         planetsTable += "<td>" + planet.name + "</td>";
         planetsTable += "<td>" + planet.diameter +"</td>";
@@ -70,23 +93,49 @@ function insertData(planets) {
         planetsTable += "<td>" + planet.surface_water + "</td>";
         planetsTable += "<td>" + planet.population +"</td>";
         planetsTable += "<td>" + planet.residents + "</td>";
+        if (window.sessionStorage.getItem('username')){
+            // console.log('You are logged in');
+            planetsTable += `<td><button onclick="votePlanet('${planet.url}','${planet.name}')" type="button" class="btn btn-secondary btn-sm vote" >` + 'Vote' + `</button></td>`;
+        }
         planetsTable += "</tr>";
     }
     document.querySelector('#data').innerHTML = planetsTable;
 }
+
+function votePlanet(url,name){
+    let id = url.split('planets/')[1].substring(0,1)
+    console.log(id)
+    let data = {id: id,
+        name: name}
+    // console.log(data)
+    sentVote(data)
+
+}
+
+async function sentVote(data) {
+
+    fetch('/vote', {
+        method: 'POST', // or 'PUT'
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+    })
+}
+
 
 
 async function insertResidents(planetUrl, planetName) {
     let peopleDetails = [];
     for (let resident of allPlanetsResidents) {
         if (resident === planetUrl) {
-            console.log('merge');
+            // console.log('merge');
             const response3 = await fetch(resident);
             const residentDetails = await response3.json();
             for (let residentDetail of residentDetails['residents']) {
                 const response4 = await fetch(residentDetail);
                 const details = await response4.json();
-                console.log(details);
+                // console.log(details);
                 peopleDetails.push(details);
             }
         }
@@ -124,3 +173,15 @@ async function insertResidents(planetUrl, planetName) {
     document.querySelector('#resident').innerHTML = residentsTable;
     document.querySelector('.modal-title').innerHTML = "Residents of " + planetName;
 }
+
+async function saveVotes(url){
+    listOfPlanets = []
+    const response = await fetch(url)
+    let test = await response.json()
+    for(let item of test['results']){
+        listOfPlanets.push(item['name'])
+    }
+    console.log(listOfPlanets);
+}
+
+saveVotes(api_url)

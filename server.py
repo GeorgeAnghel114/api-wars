@@ -1,6 +1,6 @@
-from flask import Flask, render_template,request,url_for,redirect,session
+from flask import Flask, render_template,request,url_for,redirect,session,jsonify
 import data_manager, util
-
+import ast
 
 
 app = Flask(__name__)
@@ -61,6 +61,14 @@ def login():
 def logout():
     session.clear()
     return redirect(url_for('hello_world'))
+
+
+@app.route('/vote',methods=['GET', 'POST'])
+def vote_planet():
+    data = ast.literal_eval(request.data.decode("utf-8"))
+    data_manager.insert_vote(int(data.get('id')),data.get('name'),int(session['id']))
+
+    return jsonify(added=True)
 
 
 if __name__ == '__main__':
