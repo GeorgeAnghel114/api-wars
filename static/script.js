@@ -55,7 +55,7 @@ function insertData(planets) {
             planet.residents = 'No known residents'
         } else {
             planet.residents = `
-                <button type="button" class="btn btn-outline-secondary" data-toggle="modal" data-target="#modalComponent"
+                <button type="button" class="btn btn-outline-dark" data-toggle="modal" data-target="#modalComponent"
                 onclick="insertResidents('${planet.url}', '${planet.name}')">${planet.residents.length} resident(s)</button>
                 `;
 //             planet.residents = `<button type="button" class="btn btn-outline-secondary" data-toggle="modal" data-target="#exampleModal"
