@@ -104,7 +104,7 @@ function insertData(planets) {
 
 function votePlanet(url,name){
     let id = url.split('planets/')[1].substring(0,1)
-    console.log(id)
+    // console.log(id)
     let data = {id: id,
         name: name}
     // console.log(data)
@@ -185,3 +185,31 @@ async function saveVotes(url){
 }
 
 saveVotes(api_url)
+
+
+async function getStatistics(){
+    const reponse = await fetch('/api/statistics')
+    let data = await reponse.json()
+    insert_statistics(data)
+    console.log('Data from server:',data)
+}
+
+getStatistics()
+
+const statisticsButton = document.querySelector('#statistics')
+
+statisticsButton.addEventListener('click',getStatistics)
+
+
+function insert_statistics(data){
+    let statTable = ''
+    for(let vote of data){
+        statTable += "<tr>";
+        statTable += "<td>" + vote.planet_name + "</td>";
+        statTable += "<td>" + vote.count + "</td>";
+         statTable += "</tr>";
+
+    }
+        document.querySelector('#planetCount').innerHTML = statTable;
+
+}

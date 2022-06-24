@@ -71,6 +71,13 @@ def vote_planet():
     return jsonify(added=True)
 
 
+@app.route('/api/statistics')
+def get_statistics():
+    planets_counts = data_manager.vote_planet_count()
+
+    return jsonify(planets_counts)
+
+
 if __name__ == '__main__':
     app.run(debug=True,
             port=8000)
