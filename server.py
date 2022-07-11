@@ -5,9 +5,9 @@ import os
 import psycopg2
 
 
-# connection_string = os.environe.get('DataBase/planet_votes.sql')
+# connection_string = os.environ.get('postgres://mvetfshdqarpvn:ee68120a7120be7f73acfdbc43ce379b5bdff989394afc944e4c78e03dad84d1@ec2-54-194-211-183.eu-west-1.compute.amazonaws.com:5432/d1fijvqnf74jr2')
 # connection = psycopg2.connect(connection_string)
-#
+
 
 
 app = Flask(__name__)
