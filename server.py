@@ -4,9 +4,10 @@ import ast
 import os
 import psycopg2
 
-connection_string = os.environe.get('DataBase/planet_votes.sql')
-connection = psycopg2.connect(connection_string)
 
+# connection_string = os.environe.get('DataBase/planet_votes.sql')
+# connection = psycopg2.connect(connection_string)
+#
 
 
 app = Flask(__name__)
