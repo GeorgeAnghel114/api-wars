@@ -21,7 +21,7 @@
 
 ##### Frontend:
 
-:waning_crescent_moon: JavaScript,:waning_crescent_moon: BootStrap
+:waning_crescent_moon: JavaScript :waning_crescent_moon:HTML :waning_crescent_moon: BootStrap
 
 ##### Backend:
 
